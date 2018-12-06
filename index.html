@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title>Chat</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="http://127.0.0.1:8080/socket.io/socket.io.js"> </script>
+  </head>
+  <body>
+      <div class="chat">
+        <input type="text" class="chat-name" placeholder="Adınızı Girin">
+        <div class="chat-messages"></div>
+        <textarea class="chat-textarea" placeholder="Mesajınızı Girin"></textarea>
+        <div class="chat-status">Durum: <span class="status">Boşta</span></div>
+      </div>
+      <script>
+        (function() {
+          //İlgili elemanı al
+          var getNode = function(element){
+            return document.querySelector(element);
+          };
+
+          var chatname = getNode('.chat-name');
+          var messages = getNode('.chat-messages');
+          var textarea = getNode('.chat-textarea');
+          var status = getNode('.status');
+          var statusDefault = status.textContent;
+          //Durum gir
+          var setStatus = function(s){
+            status.textContent = s;
+            if(s !== statusDefault){
+              var delay = setTimeout(function(){
+                setStatus(statusDefault);
+                clearInterval(delay);
+              }, 2000);
+            }
+          };
+
+          try {
+            var socket = io.connect('http://127.0.0.1:8080');
+          } catch (e) {
+            //Uyarı!
+          }
+          //Soket'e bağlandıysa
+          if(socket !== undefined){
+            //Mesajları al
+            socket.on('output', function(data){
+              //Mesajları yaz
+              if(data.length){
+                for (var i = 0; i < data.length; i++) {
+                  var message = document.createElement('div');
+                  message.setAttribute('class', 'chat-message');
+                  message.textContent = data[i].name + ' : ' + data[i].message;
+
+                  //Mesajların içine ekle
+                  messages.appendChild(message);
+                  messages.insertBefore(message, messages.firstChild);
+                }
+              }
+            });
+
+            //Durumu al
+            socket.on('status', function(data){
+              setStatus((typeof data == 'object') ? data.message : data);
+              if(data.clear === true){
+                textarea.value = '';
+              }
+            });
+
+            //Tuş girişini bekle
+            textarea.addEventListener('keydown', function(event){
+              var name = chatname.value;
+              var message = this.value;
+
+              //Input'u gönder
+              if(event.which===13 && event.shiftKey === false) {
+                socket.emit('input', {
+                  name : name,
+                  message : message
+                });
+
+                event.preventDefault();
+              }
+            });
+          }
+
+        })();
+      </script>
+  </body>
+</html>

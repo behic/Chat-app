@@ -1,0 +1,51 @@
+body,
+textarea,
+input{
+  font:13px "Trecbuchet MS", sans-serif;
+}
+
+.chat {
+  max-width:300px;
+
+}
+
+.chat-name,
+.chat-messages,
+.chat-textarea{
+  border:1px solid #bbb;
+}
+
+.chat-name{
+  width: 100%;
+  padding: 10px;
+  border-bottom: 0;
+  margin:0;
+}
+
+.chat-messages{
+  width: 92.7%;
+  height: 300px;
+  padding: 10px;
+  overflow-y: scroll;
+
+}
+.chat-message{
+  margin-bottom: 10px;
+}
+
+.chat textarea{
+  width: 100%;
+  padding: 10px;
+  border-top: 0;
+  margin:0;
+  max-width: 100%;
+}
+
+.chat-status{
+  color: #bbb;
+}
+
+.chat textarea,
+.chat-name {
+  outline:none;
+}

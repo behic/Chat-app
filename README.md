@@ -7,4 +7,4 @@ Working for on this project
 
 2-) Than you should install nodejs. 
 
-3-) Using npm packet managener you should install socket.io, mongodb packets.
+3-) Using npm packet managener you should install socket.io, mongodb modules.
